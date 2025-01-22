@@ -22,7 +22,7 @@ try {
   console.log(errorLoaders.message);
 }
 const corsOptions = {
-  origin: ["*", "http://localhost", "https://localhost"],
+  origin: "*",
   credentials: true,
   allowedHeaders: ["*"],
 };
