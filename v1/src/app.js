@@ -4,7 +4,7 @@ const express = require("express");
 const cors = require("cors");
 const loaders = require("./loaders");
 const errorHandler = require("./middlewares/errorHandler");
-const { AuthRoutes } = require("./api-routes");
+const { AuthRoutes, UserRoutes } = require("./api-routes");
 try {
   loaders();
 } catch (errorLoaders) {
@@ -30,6 +30,10 @@ const server = app.listen(process.env.APP_PORT, () => {
     {
       path: "/auth",
       route: AuthRoutes,
+    },
+    {
+      path: "/users",
+      route: UserRoutes,
     },
   ];
   routes.forEach((route) => {
