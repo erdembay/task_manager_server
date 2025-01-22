@@ -22,6 +22,11 @@ const User = mysqlDb.define(
       type: DataTypes.STRING,
       allowNull: false,
     },
+    activity: {
+      type: DataTypes.BOOLEAN,
+      allowNull: false,
+      defaultValue: true,
+    },
   },
   {
     tableName: "Users", // Tablo adı açıkça belirtiliyor
