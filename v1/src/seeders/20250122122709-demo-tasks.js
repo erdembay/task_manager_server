@@ -16,7 +16,7 @@ module.exports = {
       {
         title: "Task 1",
         description: "This is task 1",
-        priority: "high",
+        priorityId: 2,
         endDate: new Date(new Date().setDate(new Date().getDate() + 7)),
         status: false,
         userId: 1, // Johndoe'nin userId'si
@@ -26,7 +26,7 @@ module.exports = {
       {
         title: "Task 2",
         description: "This is task 2",
-        priority: "medium",
+        priorityId: 3,
         endDate: new Date(new Date().setDate(new Date().getDate() + 3)),
         status: false,
         userId: 2, // Janedoe'nin userId'si

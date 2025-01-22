@@ -16,14 +16,14 @@ module.exports = {
       {
         username: "johndoe",
         email: "johndoe@example.com",
-        password: passwordToHash("123456789"),
+        password: await passwordToHash("123456789"),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
       {
         username: "janedoe",
         email: "janedoe@example.com",
-        password: passwordToHash("123456789"),
+        password: await passwordToHash("123456789"),
         createdAt: new Date(),
         updatedAt: new Date(),
       },
