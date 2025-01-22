@@ -37,10 +37,6 @@ module.exports = {
         allowNull: false,
         defaultValue: false,
       },
-      attachment: {
-        type: Sequelize.STRING,
-        allowNull: true,
-      },
       userId: {
         type: Sequelize.INTEGER,
         references: {
