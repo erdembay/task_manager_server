@@ -5,6 +5,7 @@ const UserService = require("../services/MySqlService/UserService");
 const PriorityService = require("../services/MySqlService/PriorityService");
 const AttachmentService = require("../services/MySqlService/AttachmentService");
 const { Op } = require("sequelize");
+const { deleteTaskListCache } = require("../scripts/utils/helper");
 class Tasks {
   async getAll(req, res, next) {
     const {
@@ -28,7 +29,19 @@ class Tasks {
     if (endDate) {
       where.endDate = { [Op.lte]: new Date(endDate) }; // endDate'e kadar olanlar
     }
+    let cacheKey = `task_lists:`;
+    for (const key in req.query) {
+      cacheKey += `${key}_${req.query[key]}_`;
+    }
     try {
+      const cacheData = await global.redisCli.get(cacheKey);
+      if (cacheData) {
+        return res.status(httpStatus.OK).send({
+          status: true,
+          message: "Görevler Başarıyla Listelendi!",
+          data: JSON.parse(cacheData),
+        });
+      }
       const { rows, count } = await TaskService.findAndCountAll({
         include: [
           {
@@ -52,15 +65,17 @@ class Tasks {
           new ApiError("Görevler Listelenemedi", httpStatus.BAD_REQUEST)
         );
       }
+      const data = {
+        totalItems: count, // Toplam kayıt sayısı
+        totalPages: Math.ceil(count / limit), // Toplam sayfa sayısı
+        currentPage: parseInt(page), // Mevcut sayfa numarası
+        data: rows, // Döndürülen veriler
+      };
+      await global.redisCli.setex(cacheKey, 300, JSON.stringify(data));
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görevler Başarıyla Listelendi!",
-        data: {
-          totalItems: count, // Toplam kayıt sayısı
-          totalPages: Math.ceil(count / limit), // Toplam sayfa sayısı
-          currentPage: parseInt(page), // Mevcut sayfa numarası
-          data: rows, // Döndürülen veriler
-        },
+        data: data,
       });
     } catch (error) {
       next(new ApiError(error?.message));
@@ -90,6 +105,8 @@ class Tasks {
           url: file?.path,
         });
       }
+      const cacheKey = `task_lists`;
+      deleteTaskListCache(cacheKey);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev Başarıyla Oluşturuldu!",
@@ -117,6 +134,8 @@ class Tasks {
           new ApiError("Görev Güncellenemedi", httpStatus.BAD_REQUEST)
         );
       }
+      const cacheKey = `task_lists`;
+      deleteTaskListCache(cacheKey);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev başarıyla güncellendi!",
@@ -134,6 +153,8 @@ class Tasks {
       if (!response) {
         return next(new ApiError("Görev Silinemedi", httpStatus.BAD_REQUEST));
       }
+      const cacheKey = `task_lists`;
+      deleteTaskListCache(cacheKey);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev başarıyla silindi!",
