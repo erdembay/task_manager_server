@@ -6,6 +6,10 @@ const passwordToHash = async (password) => {
   const hashedPassword = await bcrypt.hash(password, saltRounds);
   return hashedPassword;
 };
+const passwordCompare = async (password, hashedPassword) => {
+  const isMatch = await bcrypt.compare(password, hashedPassword);
+  return isMatch;
+};
 // const passwordToHash = (password) => {
 //   return CryptoJS.HmacSHA256(
 //     password,
