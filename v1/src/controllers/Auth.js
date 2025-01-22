@@ -1,6 +1,7 @@
 const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
 const AuthService = require("../services/MongoService/AuthService");
+const UserService = require("../services/MySqlService/UserService");
 const {
   passwordToHash,
   generateAccessToken,
@@ -10,26 +11,28 @@ class Auths {
     try {
       const username = req?.body?.username;
       const password = req?.body?.password;
-      const repeatPassword = req?.body?.repeatPassword;
-      const name = req?.body?.name;
-      if (password !== repeatPassword) {
-        return next(
-          new ApiError("Parolalar eşleşmiyor!", httpStatus.BAD_REQUEST)
-        );
-      }
-      const response = await AuthService.create({
+      const email = req?.body?.email;
+      const response = await UserService.create({
         username: username,
-        password: passwordToHash(password),
-        name: name,
+        email: email,
+        password: await passwordToHash(password),
       });
       if (!response) {
         return next(
           new ApiError("Kullanıcı Kaydı Başarısız!", httpStatus.BAD_REQUEST)
         );
       }
-      res.status(httpStatus.OK).send(response);
+      res.status(httpStatus.OK).send({
+        status: true,
+        message: "Kullanıcı Kaydı Başarılı!",
+        data: {
+          id: response?.id,
+          username: response?.username,
+          email: response?.email,
+        },
+      });
     } catch (error) {
-      next(new ApiError(error?.message));
+      next(new ApiError(error?.errors[0]?.message ?? error?.message));
     }
   }
   async login(req, res, next) {

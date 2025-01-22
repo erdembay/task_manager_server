@@ -5,6 +5,7 @@ class Auths {
   async getAll(req, res, next) {
     try {
       const response = await UserService.list({
+        attributes: ["id", "username", "email"],
         where: { activity: true },
       });
       res.status(httpStatus.OK).send(response);

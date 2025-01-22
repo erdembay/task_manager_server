@@ -11,5 +11,8 @@ class BaseService {
   async findOne(where) {
     return this.BaseModel.findOne(where);
   }
+  create(data = Object) {
+    return this.BaseModel.create(data);
+  }
 }
 module.exports = BaseService;

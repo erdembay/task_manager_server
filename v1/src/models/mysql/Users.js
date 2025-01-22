@@ -11,12 +11,23 @@ const User = mysqlDb.define(
     username: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        args: true,
+        msg: "Bu kullanıcı adı zaten alınmış!",
+      },
     },
     email: {
       type: DataTypes.STRING,
       allowNull: false,
-      unique: true,
+      unique: {
+        args: true,
+        msg: "Bu email zaten alınmış!",
+      },
+      validate: {
+        isEmail: {
+          msg: "Geçerli bir e-posta adresi girin!",
+        },
+      },
     },
     password: {
       type: DataTypes.STRING,
