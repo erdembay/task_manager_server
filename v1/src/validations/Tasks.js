@@ -5,7 +5,7 @@ const createValidation = Joi.object({
   description: Joi.string().min(2).required(),
   endDate: Joi.date().required(),
   priorityId: Joi.number().required(),
-  attachment: Joi.array(),
+  attachment: Joi.array().items(Joi.object()),
 });
 const updateValidation = Joi.object({
   username: Joi.string().min(4).max(15).required(),

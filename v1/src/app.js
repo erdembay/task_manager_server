@@ -1,5 +1,16 @@
 const config = require("./config");
 config();
+const fs = require("fs");
+const path = require("path");
+const uploadDir = path.join(
+  path.dirname(require.main.filename),
+  "../",
+  "../",
+  "uploads"
+);
+if (!fs.existsSync(uploadDir)) {
+  fs.mkdirSync(uploadDir);
+}
 const express = require("express");
 const cors = require("cors");
 const loaders = require("./loaders");
