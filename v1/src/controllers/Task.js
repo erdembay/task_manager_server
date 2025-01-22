@@ -163,6 +163,10 @@ class Tasks {
       if (!response) {
         return next(new ApiError("Görev Bulunamadı", httpStatus.BAD_REQUEST));
       }
+      const responseAttachments = await AttachmentService.list({
+        where: { taskId: req.params?.id },
+      });
+      response.dataValues.attachments = responseAttachments;
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev başarıyla getirildi!",
