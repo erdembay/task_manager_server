@@ -1,6 +1,6 @@
 const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
-const TaskService = require("../services/MongoService/TaskService");
+const TaskService = require("../services/MySqlService/TaskService");
 class Tasks {
   async getAll(req, res, next) {
     try {

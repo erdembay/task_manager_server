@@ -1,6 +1,6 @@
 const { authenticateToken } = require("../middlewares/authenticatePassport");
 const express = require("express");
-const UserController = require("../controllers/User");
+const TaskController = require("../controllers/Task");
 const router = express.Router();
-router.route("/list").get(authenticateToken(), UserController.getAll);
+router.route("/").get(authenticateToken(), TaskController.getAll);
 module.exports = router;

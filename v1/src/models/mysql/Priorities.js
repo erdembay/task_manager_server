@@ -1,5 +1,5 @@
 const { DataTypes } = require("sequelize");
-const { mysqlDb } = require("../loaders/mysql");
+const { mysqlDb } = require("../../loaders/mysql");
 const Priority = mysqlDb.define(
   "Priority",
   {
