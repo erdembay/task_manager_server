@@ -31,5 +31,8 @@ class BaseService {
     }
     return response.destroy();
   }
+  async findAndCountAll(where = Object) {
+    return this.BaseModel.findAndCountAll(where);
+  }
 }
 module.exports = BaseService;

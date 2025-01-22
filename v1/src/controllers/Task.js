@@ -4,10 +4,33 @@ const TaskService = require("../services/MySqlService/TaskService");
 const UserService = require("../services/MySqlService/UserService");
 const PriorityService = require("../services/MySqlService/PriorityService");
 const AttachmentService = require("../services/MySqlService/AttachmentService");
+const { Op } = require("sequelize");
 class Tasks {
   async getAll(req, res, next) {
+    const {
+      status,
+      priority,
+      endDate,
+      orderBy = "createdAt", // Varsayılan sıralama: createdAt
+      sortOrder = "ASC", // Varsayılan sıralama sırası: ASC
+      page = 1,
+      limit = 10,
+    } = req.query;
+    // Filtreleme koşulları
+    const offset = (page - 1) * limit;
+
+    const where = {};
+    if (status == false || status == true) {
+      where.status = status;
+    }
+    if (priority) {
+      where.priorityId = priority;
+    }
+    if (endDate) {
+      where.endDate = { [Op.lte]: new Date(endDate) }; // endDate'e kadar olanlar
+    }
     try {
-      const response = await TaskService.list({
+      const { rows, count } = await TaskService.findAndCountAll({
         include: [
           {
             model: UserService.BaseModel,
@@ -20,8 +43,12 @@ class Tasks {
             attributes: ["id", "name"], // Seçilen alanlar
           },
         ],
+        where: where,
+        order: [[orderBy, sortOrder]],
+        limit: parseInt(limit),
+        offset: parseInt(offset),
       });
-      if (!response) {
+      if (!rows) {
         return next(
           new ApiError("Görevler Listelenemedi", httpStatus.BAD_REQUEST)
         );
@@ -29,7 +56,12 @@ class Tasks {
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görevler Başarıyla Listelendi!",
-        data: response,
+        data: {
+          totalItems: count, // Toplam kayıt sayısı
+          totalPages: Math.ceil(count / limit), // Toplam sayfa sayısı
+          currentPage: parseInt(page), // Mevcut sayfa numarası
+          data: rows, // Döndürülen veriler
+        },
       });
     } catch (error) {
       next(new ApiError(error?.message));
