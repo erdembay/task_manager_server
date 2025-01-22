@@ -5,6 +5,7 @@ const UserService = require("../services/MySqlService/UserService");
 const {
   passwordToHash,
   generateAccessToken,
+  passwordCompare,
 } = require("../scripts/utils/helper");
 class Auths {
   async register(req, res, next) {
@@ -38,24 +39,36 @@ class Auths {
   async login(req, res, next) {
     try {
       const username = req?.body?.username;
-      const password = passwordToHash(req?.body?.password);
-      const response = await AuthService.findOne({ username, password });
+      const password = req?.body?.password;
+      const response = await UserService.findOne({
+        attributes: ["id", "username", "password", "email"],
+        where: { username: username, activity: true },
+      });
       if (!response) {
         return next(
           new ApiError(
-            "Kullanıcı Adı veya Parola Hatalı!",
+            "Kayıtlı Kullanıcı Bulunmamaktadır!",
+            httpStatus.BAD_REQUEST
+          )
+        );
+      }
+      const passwordCheck = await passwordCompare(password, response?.password);
+      if (!passwordCheck) {
+        return next(
+          new ApiError(
+            "Kullanıcı Adı veya Şifre Hatalı!",
             httpStatus.BAD_REQUEST
           )
         );
       }
       const tokenBody = {
         username: response?.username,
-        _id: response?._id,
+        id: response?.id,
       };
       const accessToken = generateAccessToken(tokenBody);
       res
         .status(httpStatus.OK)
-        .send({ message: "Giriş Başarılı", jwt: accessToken });
+        .send({ message: "Giriş Başarılı!", jwt: accessToken });
     } catch (error) {
       next(new ApiError(error?.message));
     }

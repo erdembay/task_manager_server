@@ -38,4 +38,5 @@ module.exports = {
   generateAccessToken,
   generateRefreshToken,
   passwordToHash,
+  passwordCompare,
 };
