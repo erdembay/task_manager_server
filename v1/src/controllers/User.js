@@ -1,7 +1,7 @@
 const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
 const UserService = require("../services/MySqlService/UserService");
-class Auths {
+class Users {
   async getAll(req, res, next) {
     try {
       const response = await UserService.list({
@@ -14,4 +14,4 @@ class Auths {
     }
   }
 }
-module.exports = new Auths();
+module.exports = new Users();
