@@ -3,6 +3,7 @@ const ApiError = require("../errors/ApiError");
 const TaskService = require("../services/MySqlService/TaskService");
 const UserService = require("../services/MySqlService/UserService");
 const PriorityService = require("../services/MySqlService/PriorityService");
+const AttachmentService = require("../services/MySqlService/AttachmentService");
 class Tasks {
   async getAll(req, res, next) {
     try {
@@ -36,15 +37,30 @@ class Tasks {
   }
   async create(req, res, next) {
     try {
+      const response = await TaskService.create({
+        title: req.body?.title,
+        description: req.body?.description,
+        endDate: req.body?.endDate,
+        priorityId: req.body?.priorityId,
+        userId: req.user?.id,
+      });
+      if (!response) {
+        return next(new ApiError("Görev Oluşturulamadı", httpStatus.NOT_FOUND));
+      }
+      const taskId = response?.id;
       const files = req?.files || [];
-      console.log(files);
-      const uploadedFiles = files.map((file) => ({
-        originalName: file.originalname,
-        uploadedPath: `/uploads/${file.filename}`,
-      }));
+      for (const file of files) {
+        await AttachmentService.create({
+          taskId: taskId,
+          type: file?.mimetype,
+          filename: file?.originalname,
+          url: file?.path,
+        });
+      }
       res.status(httpStatus.OK).send({
         status: true,
-        message: "Tasks Create",
+        message: "Görev Başarıyla Oluşturuldu!",
+        data: response,
       });
     } catch (error) {
       next(new ApiError(error?.message));
