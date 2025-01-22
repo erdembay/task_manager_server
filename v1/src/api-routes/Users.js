@@ -4,5 +4,5 @@ const schemas = require("../validations/Auths");
 const express = require("express");
 const UserController = require("../controllers/User");
 const router = express.Router();
-router.route("/list").get(UserController.getAll);
+router.route("/list").get(authenticateToken(), UserController.getAll);
 module.exports = router;

@@ -16,8 +16,7 @@ passport.use(
   new JwtStrategy(jwtOptions, async (jwtPayload, done) => {
     try {
       const user = await UserService.findOne({
-        id: jwtPayload.id,
-        activity: true,
+        where: { id: jwtPayload.id, activity: true },
       });
       if (!user) {
         return done(null, false);
