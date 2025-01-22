@@ -1,0 +1,8 @@
+/node_modules
+/.scannerwork
+v1/src/logs/*
+package-lock.json
+.vscode
+*/*/*/Test.js
+.DS_Store
+.env
