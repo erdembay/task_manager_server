@@ -29,4 +29,5 @@ router.route("/:id").put(
   validate(schemas.updateValidation),
   TaskController.update
 );
+router.route("/:id").delete(authenticateToken(), TaskController.delete);
 module.exports = router;

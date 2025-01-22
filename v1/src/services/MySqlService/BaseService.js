@@ -24,5 +24,12 @@ class BaseService {
     }
     return response.save();
   }
+  async findOneAndDelete(where = Object) {
+    const response = await this.BaseModel.findOne(where);
+    if (!response) {
+      return null;
+    }
+    return response.destroy();
+  }
 }
 module.exports = BaseService;

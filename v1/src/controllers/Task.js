@@ -97,9 +97,16 @@ class Tasks {
   }
   async delete(req, res, next) {
     try {
+      const response = await TaskService.findOneAndDelete({
+        where: { id: req.params?.id },
+      });
+      if (!response) {
+        return next(new ApiError("Görev Silinemedi", httpStatus.BAD_REQUEST));
+      }
       res.status(httpStatus.OK).send({
         status: true,
-        message: "Tasks Delete",
+        message: "Görev başarıyla silindi!",
+        data: response,
       });
     } catch (error) {
       next(new ApiError(error?.message));

@@ -6,3 +6,4 @@ package-lock.json
 */*/*/Test.js
 .DS_Store
 .env
+/uploads/*
