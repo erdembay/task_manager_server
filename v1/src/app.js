@@ -37,6 +37,7 @@ const server = app.listen(process.env.APP_PORT, () => {
       message: "Bağlantı sağlanmıştır.",
     });
   });
+  app.use("/uploads", express.static("uploads"));
   const routes = [
     {
       path: "/auth",

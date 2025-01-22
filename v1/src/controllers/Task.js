@@ -36,7 +36,8 @@ class Tasks {
   }
   async create(req, res, next) {
     try {
-      const files = req.files || [];
+      const files = req?.files || [];
+      console.log(files);
       const uploadedFiles = files.map((file) => ({
         originalName: file.originalname,
         uploadedPath: `/uploads/${file.filename}`,
