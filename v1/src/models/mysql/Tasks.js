@@ -50,6 +50,7 @@ const Task = mysqlDb.define(
     timestamps: true,
   }
 );
+User.hasMany(Task, { foreignKey: "userId", as: "tasks" });
 Task.belongsTo(User, { foreignKey: "userId", as: "user" });
 Task.belongsTo(Priority, { foreignKey: "priorityId", as: "priority" });
 module.exports = Task;

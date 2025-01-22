@@ -1,12 +1,34 @@
 const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
 const TaskService = require("../services/MySqlService/TaskService");
+const UserService = require("../services/MySqlService/UserService");
+const PriorityService = require("../services/MySqlService/PriorityService");
 class Tasks {
   async getAll(req, res, next) {
     try {
+      const response = await TaskService.list({
+        include: [
+          {
+            model: UserService.BaseModel,
+            as: "user", // İlişkide kullanılan alias
+            attributes: ["id", "username", "email"], // Seçilen alanlar
+          },
+          {
+            model: PriorityService.BaseModel,
+            as: "priority", // İlişkide kullanılan alias
+            attributes: ["id", "name"], // Seçilen alanlar
+          },
+        ],
+      });
+      if (!response) {
+        return next(
+          new ApiError("Görevler Listelenemedi", httpStatus.NOT_FOUND)
+        );
+      }
       res.status(httpStatus.OK).send({
         status: true,
-        message: "Tasks Get All",
+        message: "Görevler Başarıyla Listelendi!",
+        data: response,
       });
     } catch (error) {
       next(new ApiError(error?.message));
