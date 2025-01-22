@@ -18,9 +18,15 @@ const upload = multer({ storage });
 const router = express.Router();
 router.route("/").get(authenticateToken(), TaskController.getAll);
 router.route("/").post(
+  authenticateToken(),
   upload.array("attachment", 10), // 10 adet dosya yükleme limiti
   validate(schemas.createValidation),
-  authenticateToken(),
   TaskController.create
+);
+router.route("/:id").put(
+  authenticateToken(),
+  upload.array("attachment", 10), // 10 adet dosya yükleme limiti
+  validate(schemas.updateValidation),
+  TaskController.update
 );
 module.exports = router;

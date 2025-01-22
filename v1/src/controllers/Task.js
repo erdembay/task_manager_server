@@ -23,7 +23,7 @@ class Tasks {
       });
       if (!response) {
         return next(
-          new ApiError("Görevler Listelenemedi", httpStatus.NOT_FOUND)
+          new ApiError("Görevler Listelenemedi", httpStatus.BAD_REQUEST)
         );
       }
       res.status(httpStatus.OK).send({
@@ -45,7 +45,9 @@ class Tasks {
         userId: req.user?.id,
       });
       if (!response) {
-        return next(new ApiError("Görev Oluşturulamadı", httpStatus.NOT_FOUND));
+        return next(
+          new ApiError("Görev Oluşturulamadı", httpStatus.BAD_REQUEST)
+        );
       }
       const taskId = response?.id;
       const files = req?.files || [];
@@ -68,9 +70,26 @@ class Tasks {
   }
   async update(req, res, next) {
     try {
+      const response = await TaskService.findOneAndUpdate(
+        {
+          where: { id: req.params?.id },
+        },
+        {
+          title: req.body?.title,
+          description: req.body?.description,
+          endDate: req.body?.endDate,
+          priorityId: req.body?.priorityId,
+        }
+      );
+      if (!response) {
+        return next(
+          new ApiError("Görev Güncellenemedi", httpStatus.BAD_REQUEST)
+        );
+      }
       res.status(httpStatus.OK).send({
         status: true,
-        message: "Tasks Update",
+        message: "Görev başarıyla güncellendi!",
+        data: response,
       });
     } catch (error) {
       next(new ApiError(error?.message));

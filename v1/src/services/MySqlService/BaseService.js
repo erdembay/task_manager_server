@@ -14,5 +14,15 @@ class BaseService {
   create(data = Object) {
     return this.BaseModel.create(data);
   }
+  async findOneAndUpdate(where = Object, data = Object) {
+    const response = await this.BaseModel.findOne(where);
+    if (!response) {
+      return null;
+    }
+    for (const key in data) {
+      response[key] = data[key];
+    }
+    return response.save();
+  }
 }
 module.exports = BaseService;
