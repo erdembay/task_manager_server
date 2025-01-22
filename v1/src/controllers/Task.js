@@ -18,7 +18,6 @@ class Tasks {
     } = req.query;
     // Filtreleme koşulları
     const offset = (page - 1) * limit;
-
     const where = {};
     if (status == false || status == true) {
       where.status = status;
@@ -142,6 +141,35 @@ class Tasks {
       });
     } catch (error) {
       next(new ApiError(error?.message));
+    }
+  }
+  async getById(req, res, next) {
+    try {
+      const response = await TaskService.findOne({
+        where: { id: req.params?.id },
+        include: [
+          {
+            model: UserService.BaseModel,
+            as: "user",
+            attributes: ["id", "username", "email"],
+          },
+          {
+            model: PriorityService.BaseModel,
+            as: "priority",
+            attributes: ["id", "name"],
+          },
+        ],
+      });
+      if (!response) {
+        return next(new ApiError("Görev Bulunamadı", httpStatus.BAD_REQUEST));
+      }
+      res.status(httpStatus.OK).send({
+        status: true,
+        message: "Görev başarıyla getirildi!",
+        data: response,
+      });
+    } catch (error) {
+      return next(new ApiError(error?.message));
     }
   }
 }

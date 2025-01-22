@@ -30,4 +30,5 @@ router.route("/:id").put(
   TaskController.update
 );
 router.route("/:id").delete(authenticateToken(), TaskController.delete);
+router.route("/:id").get(authenticateToken(), TaskController.getById);
 module.exports = router;
