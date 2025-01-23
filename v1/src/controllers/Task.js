@@ -134,6 +134,16 @@ class Tasks {
           new ApiError("Görev Güncellenemedi", httpStatus.BAD_REQUEST)
         );
       }
+      const taskId = response?.id;
+      const files = req?.files || [];
+      for (const file of files) {
+        await AttachmentService.create({
+          taskId: taskId,
+          type: file?.mimetype,
+          filename: file?.originalname,
+          url: file?.path,
+        });
+      }
       const cacheKey = `task_lists`;
       deleteTaskListCache(cacheKey);
       res.status(httpStatus.OK).send({
