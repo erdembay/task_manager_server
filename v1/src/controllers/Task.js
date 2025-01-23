@@ -127,6 +127,7 @@ class Tasks {
           description: req.body?.description,
           endDate: req.body?.endDate,
           priorityId: req.body?.priorityId,
+          status: req.body?.status,
         }
       );
       if (!response) {

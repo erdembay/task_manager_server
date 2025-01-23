@@ -12,6 +12,7 @@ const updateValidation = Joi.object({
   description: Joi.string().min(2).required(),
   endDate: Joi.date().required(),
   priorityId: Joi.number().required(),
+  status: Joi.any(),
   attachment: Joi.array().items(Joi.object()),
 });
 module.exports = {
