@@ -2,7 +2,7 @@ const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
 const AttachmentService = require("../services/MySqlService/AttachmentService");
 class Attachments {
-  async attachmentDelete(req, res, next) {
+  async delete(req, res, next) {
     try {
       const response = await AttachmentService.findOneAndDelete({
         where: { id: req.params?.id },
