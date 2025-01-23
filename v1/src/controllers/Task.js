@@ -164,6 +164,23 @@ class Tasks {
       next(new ApiError(error?.message));
     }
   }
+  async attachmentDelete(req, res, next) {
+    try {
+      const response = await AttachmentService.findOneAndDelete({
+        where: { id: req.params?.id },
+      });
+      if (!response) {
+        return next(new ApiError("Ek Silinemedi", httpStatus.BAD_REQUEST));
+      }
+      res.status(httpStatus.OK).send({
+        status: true,
+        message: "Ek başarıyla silindi!",
+        data: response,
+      });
+    } catch (error) {
+      next(new ApiError(error?.message));
+    }
+  }
   async getById(req, res, next) {
     try {
       const response = await TaskService.findOne({
