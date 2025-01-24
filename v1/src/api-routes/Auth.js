@@ -15,5 +15,5 @@ router
 router
   .route("/login")
   .post(validate(schemas.loginValidation), AuthController.login);
-router.route("/logout").get(authenticateToken(), AuthController.logout);
+router.route("/logout").get(AuthController.logout);
 module.exports = router;
