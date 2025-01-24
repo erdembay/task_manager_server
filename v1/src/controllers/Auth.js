@@ -1,6 +1,5 @@
 const httpStatus = require("http-status");
 const ApiError = require("../errors/ApiError");
-const AuthService = require("../services/MongoService/AuthService");
 const UserService = require("../services/MySqlService/UserService");
 const {
   passwordToHash,
