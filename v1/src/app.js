@@ -12,6 +12,7 @@ if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir);
 }
 const express = require("express");
+const session = require("express-session");
 const cors = require("cors");
 const loaders = require("./loaders");
 const errorHandler = require("./middlewares/errorHandler");
@@ -27,13 +28,31 @@ try {
   console.log(errorLoaders.message);
 }
 const corsOptions = {
-  origin: "*",
+  origin: ["*", "http://localhost"],
   credentials: true,
-  allowedHeaders: ["*"],
+  allowedHeaders: ["Content-Type", "Authorization"],
 };
+const { RedisStore } = require("connect-redis");
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
+app.use(
+  session({
+    name: process.env.COOKIE_NAME,
+    store: new RedisStore({
+      client: global.redisCli,
+      disableTouch: true,
+    }),
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      maxAge: 1000 * 60 * 60 * 24 * 3, // 3 gün
+      httpOnly: true, // Sadece sunucu tarafından erişilebilir
+      secure: process.env.ENVIRONMENT === "production", // HTTPS üzerinden çalışır
+    },
+  })
+);
 const server = app.listen(process.env.APP_PORT, () => {
   console.log(process.env.APP_PORT, "Portu üzerinde, Sunucu ayağa kalktı...");
   app.get("/", (req, res) => {

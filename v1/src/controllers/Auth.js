@@ -66,6 +66,12 @@ class Auths {
         id: response?.id,
       };
       const accessToken = generateAccessToken(tokenBody);
+      req.session.user = {
+        id: response?.id,
+        username: response?.username,
+        email: response?.email,
+        jwt: accessToken,
+      };
       res
         .status(httpStatus.OK)
         .send({ message: "Giriş Başarılı!", jwt: accessToken });
