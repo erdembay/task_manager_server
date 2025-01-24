@@ -79,5 +79,15 @@ class Auths {
       next(new ApiError(error?.message));
     }
   }
+  async logout(req, res, next) {
+    try {
+      await req.session.destroy();
+      res
+        .status(httpStatus.OK)
+        .send({ status: true, message: "Çıkış Başarılı!" });
+    } catch (error) {
+      next(new ApiError(error?.message));
+    }
+  }
 }
 module.exports = new Auths();
