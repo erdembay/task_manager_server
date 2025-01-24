@@ -26,7 +26,7 @@ const authenticateToken = (where) => (req, res, next) => {
             httpStatus.UNAUTHORIZED
           )
         );
-      req.tokendata = data;
+      req.user = data;
       next();
     }
   );
