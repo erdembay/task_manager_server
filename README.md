@@ -25,18 +25,19 @@ MongoDB bağlantılarını özellikle kontrol ediniz development ortamında çal
 
 ### Veritabanı Kurulumu
 Veritabanını oluşturmak ve gerekli tabloları eklemek için aşağıdaki komutu çalıştırın:
-Veritabanı `mysql` tabloları [SQL Komutları](sql.sql) içerisinde bulunmaktadır
-MongoDB şemaları model altında belirtilmiştir.
 
-Eğer DB yi direkt olarak migrate etmek isterseniz;
+DB yi migrate ediniz;
 ```bash
 npm run migrate
 ```
 
-Seederları çalıştırmak isterseniz;
+Seederları çalıştırınız; (Priority tablosu için gereklidir!...)
 ```bash
 npm run seeder
 ```
+
+Veritabanı `mysql` tabloları [SQL Komutları](sql.sql) içerisinde bulunmaktadır
+MongoDB şemaları model altında belirtilmiştir.
 
 ### Sunucuyu Başlatma
 ```bash
