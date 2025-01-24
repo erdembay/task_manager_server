@@ -1,5 +1,4 @@
 const validate = require("../middlewares/validate");
-const { authenticateToken } = require("../middlewares/authenticate");
 const passwordCheck = require("../middlewares/passwordCheck");
 const schemas = require("../validations/Auths");
 const express = require("express");
