@@ -1,4 +1,4 @@
-const { authenticateToken } = require("../middlewares/authenticatePassport");
+const { authenticateToken } = require("../middlewares/authenticate");
 const express = require("express");
 const AttachmentController = require("../controllers/Attachment");
 const router = express.Router();
