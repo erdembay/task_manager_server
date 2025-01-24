@@ -2,7 +2,7 @@ const Mongoose = require("mongoose");
 const MailLogSchema = new Mongoose.Schema(
   {
     to: {
-      type: Number,
+      type: String,
       required: true,
     },
     subject: {

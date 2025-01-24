@@ -18,6 +18,7 @@ async function checkTasks() {
       endDate: {
         [Op.between]: [now, tomorrow], // Şu an ile 1 gün sonrasındaki tarih arası
       },
+      status: 0,
     },
   });
   if (response.length > 0) {
