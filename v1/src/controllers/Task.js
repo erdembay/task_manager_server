@@ -4,6 +4,7 @@ const TaskService = require("../services/MySqlService/TaskService");
 const UserService = require("../services/MySqlService/UserService");
 const PriorityService = require("../services/MySqlService/PriorityService");
 const AttachmentService = require("../services/MySqlService/AttachmentService");
+const { logger } = require("../scripts/logger/TaskLogger");
 const { Op } = require("sequelize");
 const { deleteTaskListCache } = require("../scripts/utils/helper");
 class Tasks {
@@ -107,6 +108,7 @@ class Tasks {
       }
       const cacheKey = `task_lists`;
       deleteTaskListCache(cacheKey);
+      logger(taskId, "CREATE", { data: response?.dataValues }, req.user?.id);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev Başarıyla Oluşturuldu!",
@@ -147,6 +149,7 @@ class Tasks {
       }
       const cacheKey = `task_lists`;
       deleteTaskListCache(cacheKey);
+      logger(taskId, "UPDATE", { data: response?.dataValues }, req.user?.id);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev başarıyla güncellendi!",
@@ -158,14 +161,16 @@ class Tasks {
   }
   async delete(req, res, next) {
     try {
+      const taskId = req.params?.id;
       const response = await TaskService.findOneAndDelete({
-        where: { id: req.params?.id },
+        where: { id: taskId },
       });
       if (!response) {
         return next(new ApiError("Görev Silinemedi", httpStatus.BAD_REQUEST));
       }
       const cacheKey = `task_lists`;
       deleteTaskListCache(cacheKey);
+      logger(taskId, "DELETE", { data: response?.dataValues }, req.user?.id);
       res.status(httpStatus.OK).send({
         status: true,
         message: "Görev başarıyla silindi!",

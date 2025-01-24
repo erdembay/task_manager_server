@@ -19,10 +19,6 @@ const TaskLogSchema = new Mongoose.Schema(
       type: Number,
       required: true,
     },
-    timestamp: {
-      type: Date,
-      default: Date.now,
-    },
   },
   { versionKey: false, timestamps: true }
 );
