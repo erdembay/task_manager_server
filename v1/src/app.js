@@ -2,6 +2,7 @@ const config = require("./config");
 config();
 const fs = require("fs");
 const path = require("path");
+const { Cron } = require("croner");
 const uploadDir = path.join(
   path.dirname(require.main.filename),
   "../",
@@ -100,4 +101,12 @@ global.redisCli.get("test", (err, result) => {
   }
   console.log(result);
 });
-checkTasks();
+global.job = new Cron("* */30 * * * *", async () => {
+  // Her 30 dakikada bir çalışacak
+  try {
+    checkTasks();
+  } catch (error) {
+    console.log(error?.message);
+  }
+});
+global.job.trigger();
