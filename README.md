@@ -8,7 +8,7 @@ Task Manager Server NodeJS
 ### Projeyi Klonlama
 ```bash
 git clone https://github.com/erdembay/task_manager_server.git
-cd task-manager
+cd task_manager_serer
 ```
 
 ### Bağımlılıkları Yükleme
