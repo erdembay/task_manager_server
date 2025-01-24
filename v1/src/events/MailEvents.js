@@ -1,4 +1,4 @@
 const EventEmitter = require("events");
 class MailEmitter extends EventEmitter {}
-const MailEmitter = new MailEmitter();
-module.exports = MailEmitter;
+const mailEmitter = new MailEmitter();
+module.exports = mailEmitter;

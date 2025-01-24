@@ -1,5 +1,5 @@
-const MailEmitter = require("./MailEvents");
+const mailEmitter = require("./MailEvents");
 
-MailEmitter.on("sendMail", (task) => {
+mailEmitter.on("sendMail", (task) => {
   console.log(task);
 });

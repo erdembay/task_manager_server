@@ -33,6 +33,8 @@ const corsOptions = {
   allowedHeaders: ["Content-Type", "Authorization"],
 };
 const { RedisStore } = require("connect-redis");
+require("./events/MailListeners");
+const checkTasks = require("./scripts/utils/CheckTasks");
 const app = express();
 app.use(cors(corsOptions));
 app.use(express.json());
@@ -98,3 +100,4 @@ global.redisCli.get("test", (err, result) => {
   }
   console.log(result);
 });
+checkTasks();

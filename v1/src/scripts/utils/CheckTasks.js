@@ -1,10 +1,12 @@
-const MailEmitter = require("../events/MailEvents");
+const mailEmitter = require("../../events/MailEvents");
 function checkTasks() {
-  const task = {
-    subject: "Check Tasks",
-    message: "Please check the tasks",
+  const mailExample = {
+    from: "info@taskmanager.com",
+    to: "usermail",
+    subject: "Task Hatırlatması!",
+    text: "Task başlığı ve son tarihi.",
   };
-  MailEmitter.emit("sendMail", task);
+  mailEmitter.emit("sendMail", mailExample);
 }
 
 module.exports = checkTasks;
